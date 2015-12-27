@@ -13,6 +13,9 @@ class Sprite:
 		self.frameSize = (TileSize[0] + Padding[0], TileSize[1] + Padding[1])
 		self.isAnimPaused = False
 
+	def SetPosition(self, Position):
+		self.position = Position
+
 	def AddAnimation(self, Name, Animation, Speed, Loop):
 		self.animations[Name] = (Speed, Loop, Animation, Name)
 
@@ -22,6 +25,10 @@ class Sprite:
 			self.frame = 0
 			self.currentAnimation = self.animations[Name]
 
+	def ResetAnimation(self):
+		self.frame = 0
+		self.frameTimer = 0.0
+
 	def PauseAnimation(self, Pause):
 		self.isAnimPaused = Pause
 
@@ -29,8 +36,8 @@ class Sprite:
 		if self.currentAnimation is not None:
 			if not self.isAnimPaused:
 				self.frameTimer += DT * self.currentAnimation[0]
-				if self.frameTimer >= 1.0:
-					self.frameTimer = 0.0
+				while self.frameTimer >= 1.0:
+					self.frameTimer -= 1.0
 					self.frame = (self.frame + 1) % len(self.currentAnimation[2])
 
 	def Render(self, Screen):
