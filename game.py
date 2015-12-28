@@ -1,54 +1,58 @@
 import pygame
 from pygame.locals import *
 from link import Link
+from sword import Sword
+from globalcomm import GlobalComm
 
 FRAMES_PER_SECOND = 60
+DRAW_SURFACE_SIZE = (256, 224)
+SCREEN_SIZE = (512, 448)
 
+class Game():
+	def __init__(self):
+		self.clock = pygame.time.Clock()
+		self.screen = pygame.display.set_mode(SCREEN_SIZE, DOUBLEBUF)
+		self.drawSurface = pygame.Surface(DRAW_SURFACE_SIZE)
+		self.gameObjects = []
+		GlobalComm.SetState('draw_surface', self.drawSurface)
 
-def Init():
-	# Setup the screen and clock
-	screen = pygame.display.set_mode((256, 224), DOUBLEBUF)
-	clock = pygame.time.Clock()
+	def StartGame(self):
+		self.InitGameState()
+		self.GameLoop()
 
-	# Start the game loop
-	GameLoop(screen, clock)
+	def InitGameState(self):
+		self.gameObjects += [GlobalComm.SetState('link', Link())]
+		self.gameObjects += [GlobalComm.SetState('link_sword', Sword())]
 
-def GameLoop(Screen, Clock):
-	# A list of game objects
-	gameObjects = []
+	def GameLoop(self):
+		# Loop until the stop condition is met
+		shouldRun = True
+		while shouldRun:
+			# Stop until the next frame
+			GlobalComm.SetState('dt', self.clock.tick(FRAMES_PER_SECOND) / 1000.0)
+			# Do update logic here
+			self.Update()
+			# Render everything
+			self.drawSurface.fill((0, 0, 0))
+			self.Render()
 
-	# Add a temp sprite
-	testLink = Link()
-	gameObjects += [testLink]
+	def Update(self):
+		# Get all events
+		GlobalComm.SetState('events', pygame.event.get())
+		GlobalComm.SetState('key_states', pygame.key.get_pressed())
+		# Update all game objects
+		for x in self.gameObjects:
+			x.Update()
 
-	# Loop until the stop condition is met
-	shouldRun = True
-	while shouldRun:
-		# Stop until the next frame
-		dt = Clock.tick(FRAMES_PER_SECOND) / 1000.0
+	def Render(self):
+		# Sort and render all game objects by ascending z-order
+		self.gameObjects.sort(key=lambda o: o.zOrder)
+		for x in self.gameObjects:
+			x.Render()
+		# Scale the screen
+		pygame.transform.scale(self.drawSurface, SCREEN_SIZE, self.screen)
+		# Draw to the screen
+		pygame.display.flip()
 
-		# Do update logic here
-		Update(dt, gameObjects)
-
-		# Render everything
-		Screen.fill((0, 0, 0))
-		Render(gameObjects, Screen)
-
-def Update(DT, GameObjects):
-	# Get all events
-	events = pygame.event.get()
-
-	# Update all game objects
-	for x in GameObjects:
-		x.Update(DT, events)
-
-def Render(GameObjects, Screen):
-	# Render all game objects
-	for x in GameObjects:
-		x.Render(Screen)
-
-	# Draw to the screen
-	pygame.display.flip()
-
-# Init the game
-Init()
+# Start the game
+Game().StartGame()

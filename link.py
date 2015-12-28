@@ -1,10 +1,12 @@
 import pygame
 from pygame.locals import *
+from contentmanager import ContentManager
+from globalcomm import GlobalComm
 from sprite import Sprite
 from sword import Sword
 
 MOVE_SPEED = 75
-WALK_ANIM_SPEED = 8
+WALK_ANIM_SPEED = 6
 SWING_SPEED = 6
 
 WALK = 'walk'
@@ -16,16 +18,18 @@ LEFT = 'left'
 RIGHT = 'right'
 UP = 'up'
 
+# Load Link's content
+ContentManager.LoadImage('link', 'Images/link.png')
+
 class Link(Sprite):
 	def __init__(self):
 		# Prepare the base
-		Sprite.__init__(self, 'Images/link.png', (16, 16), (14, 14))
-
+		Sprite.__init__(self, 'link', (16, 16), (14, 14))
 		# Prepare Link's state info
 		self.direction = DOWN
 		self.isSwinging = False
 		self.swingTimer = 0.0
-
+		self.zOrder = 1.0
 		# Add link's animations
 		# Standing
 		self.AddAnimation('stand_down', [(0, 0, 0, 0)], 0, True)
@@ -43,70 +47,55 @@ class Link(Sprite):
 		self.AddAnimation('swing_up', [(2, 2, 0, 0)], 0, True)
 		self.AddAnimation('swing_right', [(3, 2, 0, 0)], 0, True)
 		self.SetAnimation('stand_down')
-		
-		# Create Link's sword
-		self.sword = Sword()
 
-	def Update(self, DT, Events):
+	def Update(self):
 		# Update the base sprite
-		Sprite.Update(self, DT, Events)
-
-		# Grab current keyboard state
-		keyStates = pygame.key.get_pressed()
-
+		Sprite.Update(self)
 		# Update movement and get position change
-		moved, xChange, yChange = self.Move(DT, keyStates)
-
+		moved, xChange, yChange = self.Move()
 		# Check for and update swing state
-		self.Swing(DT, keyStates)
-
+		self.Swing()
 		# Set an appropriate animation for the current action
 		action = SWING if self.isSwinging else (WALK if moved else STAND)
 		self.SetAnimation(action + '_' + self.direction)
-
 		# Move Link
 		self.position = (self.position[0] + xChange, self.position[1] + yChange)
 
-		# Update the sword
-		self.sword.Update(DT, Events)
-
-	def Render(self, Screen):
-		# Only render the sword if link is swinging
-		if self.isSwinging:
-			self.sword.SetPosition(self.position)
-			self.sword.Render(Screen)
-		# Render Link's sprite
-		Sprite.Render(self, Screen)
-
-	def Move(self, DT, KeyStates):
+	def Move(self):
+		keyStates = GlobalComm.GetState('key_states')
+		dt = GlobalComm.GetState('dt')
 		moved = False
 		xChange, yChange = 0, 0
 		if not self.isSwinging:
-			if KeyStates[K_RIGHT]:
-				xChange = MOVE_SPEED * DT
+			if keyStates[K_RIGHT]:
+				xChange = MOVE_SPEED * dt
 				self.direction = RIGHT
 				moved = True
-			elif KeyStates[K_LEFT]:
-				xChange = -MOVE_SPEED * DT
+			elif keyStates[K_LEFT]:
+				xChange = -MOVE_SPEED * dt
 				self.direction = LEFT
 				moved = True
-			elif KeyStates[K_DOWN]:
-				yChange = MOVE_SPEED * DT
+			elif keyStates[K_DOWN]:
+				yChange = MOVE_SPEED * dt
 				self.direction = DOWN
 				moved = True
-			elif KeyStates[K_UP]:
-				yChange = -MOVE_SPEED * DT
+			elif keyStates[K_UP]:
+				yChange = -MOVE_SPEED * dt
 				self.direction = UP
 				moved = True
 		return moved, xChange, yChange
 
-	def Swing(self, DT, KeyStates):
+	def Swing(self):
+		keyStates = GlobalComm.GetState('key_states')
+		sword = GlobalComm.GetState('link_sword')
+		dt = GlobalComm.GetState('dt')
 		if not self.isSwinging:
-			if KeyStates[K_a]:
+			if keyStates[K_a]:
 				self.isSwinging = True
 				self.swingTimer = 0.0
-				self.sword.ResetForSwing(self.direction)
+				sword.ResetForSwing(self.position, self.direction)
 		else:
-			self.swingTimer += DT * SWING_SPEED
+			self.swingTimer += dt * SWING_SPEED
 			if self.swingTimer >= 1.0:
 				self.isSwinging = False
+				# DEACTIVATE SWORD HERE
