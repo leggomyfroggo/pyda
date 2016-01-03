@@ -20,7 +20,16 @@ KNOCKBACK_SPEED = 90
 KNOCKBACK_ANIM_SPEED = 30
 
 class Goriya(Enemy):
+	"""
+	Represents an Enemy of the Goriya type.
+	"""
 	def __init__(self, Position):
+		"""
+		Initializes an instance of a Goriya.
+
+		Args:
+			Position:	A 2-tuple (x, y) representing the starting position of the Goriya.
+		"""
 		# Prepare the base
 		Enemy.__init__(self, 3, (16, 16), (14, 14))
 		self.position = Position
@@ -39,11 +48,17 @@ class Goriya(Enemy):
 		# Flashing
 		self.AddAnimation('knockback_spin', [(4, 2, 0, 0), (1, 2, 0, 0), (6, 2, 0, 0), (3, 2, 0, 0)], KNOCKBACK_ANIM_SPEED, True)
 	def Update(self):
+		"""
+		Updates the Goriya's state.
+		"""
 		self.MoveAround()
 		# Update the base enemy
 		Enemy.Update(self)
 
 	def MoveAround(self):
+		"""
+		Updates the AI and movement of the Goriya.
+		"""
 		dt = GlobalComm.GetState('dt')
 		# Only run AI if knockback isn't happening
 		if not self.isKnockedBack:
@@ -73,6 +88,13 @@ class Goriya(Enemy):
 		self.position = (self.position[0] + self.speed[0] * dt, self.position[1] + self.speed[1] * dt)
 
 	def ApplyDamage(self, DamageAmount, Direction):
+		"""
+		Applies damage to the Goriya and initiates knockback.
+
+		Args:
+			DamageAmount:	The amount of damage to deal to the Goriya.
+			Direction:		The direction in which to knockback the Goriya.
+		"""
 		if Enemy.ApplyDamage(self, DamageAmount, Direction):
 			self.oldSpeed = self.speed
 			if Direction == DOWN:

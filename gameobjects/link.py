@@ -22,7 +22,13 @@ UP = 'up'
 ContentManager.LoadImage('link', 'content/images/link.png')
 
 class Link(Sprite):
+	"""
+	Represents the player character Link.
+	"""
 	def __init__(self):
+		"""
+		Initializes an instance of Link.
+		"""
 		# Prepare the base
 		Sprite.__init__(self, 'link', (16, 16), (14, 14))
 		# Prepare Link's state info
@@ -49,6 +55,9 @@ class Link(Sprite):
 		self.SetAnimation('stand_down')
 
 	def Update(self):
+		"""
+		Updates Link's state.
+		"""
 		# Update the base sprite
 		Sprite.Update(self)
 		# Update movement and get position change
@@ -62,6 +71,9 @@ class Link(Sprite):
 		self.position = (self.position[0] + xChange, self.position[1] + yChange)
 
 	def Move(self):
+		"""
+		Moves Link's position based on key and other states.
+		"""
 		keyStates = GlobalComm.GetState('key_states')
 		dt = GlobalComm.GetState('dt')
 		moved = False
@@ -86,6 +98,9 @@ class Link(Sprite):
 		return moved, xChange, yChange
 
 	def Swing(self):
+		"""
+		Initiates a swing of Link's sword.
+		"""
 		keyStates = GlobalComm.GetState('key_states')
 		sword = GlobalComm.GetState('link_sword')
 		dt = GlobalComm.GetState('dt')

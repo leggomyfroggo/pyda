@@ -14,7 +14,13 @@ UP = 'up'
 ContentManager.LoadImage('sword', 'content/images/link.png')
 
 class Sword(Sprite):
+	"""
+	Represents Link's sword.
+	"""
 	def __init__(self):
+		"""
+		Initializes an instance of Sword.
+		"""
 		# Prepare the base
 		Sprite.__init__(self, 'sword', (16, 16), (14, 14))
 		# Set an initial direction to prevent things from breaking
@@ -28,12 +34,22 @@ class Sword(Sprite):
 		self.SetAnimation('down')
 
 	def ResetForSwing(self, Position, Direction):
+		"""
+		Resets the swing state of the Sword.
+
+		Args:
+			Position:	A 2-tuple(x, y) representing where the sword should swing from.
+			Direction:	The direction in which the sword should swing. TODO: Explain direction consts
+		"""
 		self.position = Position
 		self.direction = Direction
 		self.SetAnimation(self.direction)
 		self.ResetAnimation()
 
 	def Update(self):
+		"""
+		Updates the Sword state.
+		"""
 		Sprite.Update(self)
 		# Check for collisions with enemies if the animation is going
 		if not self.isAnimPaused:
@@ -43,5 +59,8 @@ class Sword(Sprite):
 					x.ApplyDamage(1, self.direction)
 
 	def Render(self):
+		"""
+		Renders the sword.
+		"""
 		if not self.isAnimPaused:
 			Sprite.Render(self)
