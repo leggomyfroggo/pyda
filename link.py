@@ -35,12 +35,12 @@ class Link(Sprite):
 		self.AddAnimation('stand_down', [(0, 0, 0, 0)], 0, True)
 		self.AddAnimation('stand_left', [(1, 0, 0, 0)], 0, True)
 		self.AddAnimation('stand_up', [(2, 0, 0, 0)], 0, True)
-		self.AddAnimation('stand_right', [(3, 0, -1, 0)], 0, True)
+		self.AddAnimation('stand_right', [(3, 1, 0, 0)], 0, True)
 		# Walking
 		self.AddAnimation('walk_down', [(0, 0, 0, 0), (0, 1, 0, 0)], WALK_ANIM_SPEED, True)
 		self.AddAnimation('walk_left', [(1, 0, 0, 0), (1, 1, 0, 0)], WALK_ANIM_SPEED, True)
 		self.AddAnimation('walk_up', [(2, 0, 0, 0), (2, 1, 0, 0)], WALK_ANIM_SPEED, True)
-		self.AddAnimation('walk_right', [(3, 0, -1, 0), (3, 1, 0, 0)], WALK_ANIM_SPEED, True)
+		self.AddAnimation('walk_right', [(3, 1, 0, 0), (3, 0, -1, 0)], WALK_ANIM_SPEED, True)
 		# Swinging
 		self.AddAnimation('swing_down', [(0, 2, 0, 0)], 0, True)
 		self.AddAnimation('swing_left', [(1, 2, 0, 0)], 0, True)

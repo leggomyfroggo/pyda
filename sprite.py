@@ -61,3 +61,16 @@ class Sprite:
 
 	def OnAnimationFinished(self):
 		pass
+
+	def GetHitbox(self):
+		currentFrame = self.currentAnimation[2][self.frame]
+		return (self.position[0] + currentFrame[2], self.position[1] + currentFrame[3], self.tileSize[0], self.tileSize[1])
+
+	def IsCollidingWithSprite(self, Sprite2):
+		selfBox = self.GetHitbox()
+		sprite2Box = Sprite2.GetHitbox()
+		cond1 = selfBox[0] > (sprite2Box[0] + sprite2Box[2])
+		cond2 = selfBox[1] > (sprite2Box[1] + sprite2Box[3])
+		cond3 = (selfBox[0] + selfBox[2]) < sprite2Box[0]
+		cond4 = (selfBox[1] + selfBox[3]) < sprite2Box[1]
+		return not cond1 and not cond2 and not cond3 and not cond4

@@ -2,6 +2,7 @@ import pygame
 from pygame.locals import *
 from link import Link
 from sword import Sword
+from goriya import Goriya
 from globalcomm import GlobalComm
 
 FRAMES_PER_SECOND = 60
@@ -13,8 +14,11 @@ class Game():
 		self.clock = pygame.time.Clock()
 		self.screen = pygame.display.set_mode(SCREEN_SIZE, DOUBLEBUF)
 		self.drawSurface = pygame.Surface(DRAW_SURFACE_SIZE)
-		self.gameObjects = []
 		GlobalComm.SetState('draw_surface', self.drawSurface)
+		self.gameObjects = []
+		GlobalComm.SetState('game_objects', self.gameObjects)
+		self.destroyedObjects = []
+		GlobalComm.SetState('destroyed_objects', self.destroyedObjects)
 
 	def StartGame(self):
 		self.InitGameState()
@@ -23,6 +27,8 @@ class Game():
 	def InitGameState(self):
 		self.gameObjects += [GlobalComm.SetState('link', Link())]
 		self.gameObjects += [GlobalComm.SetState('link_sword', Sword())]
+		# Test enemies
+		self.gameObjects += [Goriya((128, 64))]
 
 	def GameLoop(self):
 		# Loop until the stop condition is met
@@ -43,6 +49,9 @@ class Game():
 		# Update all game objects
 		for x in self.gameObjects:
 			x.Update()
+		# Get rid of destroyed objects
+		for x in self.destroyedObjects:
+			self.gameObjects.remove(x)
 
 	def Render(self):
 		# Sort and render all game objects by ascending z-order

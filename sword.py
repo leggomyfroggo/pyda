@@ -1,7 +1,9 @@
 import pygame
 from pygame.locals import *
 from contentmanager import ContentManager
+from globalcomm import GlobalComm
 from sprite import Sprite
+from enemy import Enemy
 
 DOWN = 'down'
 LEFT = 'left'
@@ -31,10 +33,15 @@ class Sword(Sprite):
 		self.SetAnimation(self.direction)
 		self.ResetAnimation()
 
+	def Update(self):
+		Sprite.Update(self)
+		# Check for collisions with enemies if the animation is going
+		if not self.isAnimPaused:
+			enemies = [x for x in GlobalComm.GetState('game_objects') if isinstance(x, Enemy)]
+			for x in enemies:
+				if self.IsCollidingWithSprite(x):
+					x.ApplyDamage(1, self.direction)
+
 	def Render(self):
-		print self.isAnimPaused
 		if not self.isAnimPaused:
 			Sprite.Render(self)
-
-	def OnAnimationFinished(self):
-		print 'oh god'
