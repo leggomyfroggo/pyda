@@ -1,9 +1,9 @@
 import pygame
 from pygame.locals import *
-from contentmanager import ContentManager
-from globalcomm import GlobalComm
-from sprite import Sprite
-from sword import Sword
+from helpers.contentmanager import ContentManager
+from helpers.globalcomm import GlobalComm
+from gameobjects.sprite import Sprite
+from gameobjects.sword import Sword
 
 MOVE_SPEED = 75
 WALK_ANIM_SPEED = 6
@@ -19,7 +19,7 @@ RIGHT = 'right'
 UP = 'up'
 
 # Load Link's content
-ContentManager.LoadImage('link', 'Images/link.png')
+ContentManager.LoadImage('link', 'content/images/link.png')
 
 class Link(Sprite):
 	def __init__(self):

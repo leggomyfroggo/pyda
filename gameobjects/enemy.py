@@ -1,11 +1,11 @@
 import pygame
 from pygame.locals import *
-from globalcomm import GlobalComm
-from contentmanager import ContentManager
-from sprite import Sprite
+from helpers.globalcomm import GlobalComm
+from helpers.contentmanager import ContentManager
+from gameobjects.sprite import Sprite
 
 # Load enemy content
-ContentManager.LoadImage('enemies', 'Images/enemies.png')
+ContentManager.LoadImage('enemies', 'content/images/enemies.png')
 
 class Enemy(Sprite):
 	def __init__(self, Health, TileSize, Padding):

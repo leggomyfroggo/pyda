@@ -1,9 +1,9 @@
 import pygame
 from pygame.locals import *
-from contentmanager import ContentManager
-from globalcomm import GlobalComm
-from sprite import Sprite
-from enemy import Enemy
+from helpers.contentmanager import ContentManager
+from helpers.globalcomm import GlobalComm
+from gameobjects.sprite import Sprite
+from gameobjects.enemy import Enemy
 
 DOWN = 'down'
 LEFT = 'left'
@@ -11,7 +11,7 @@ RIGHT = 'right'
 UP = 'up'
 
 # Load the sword's content
-ContentManager.LoadImage('sword', 'Images/link.png')
+ContentManager.LoadImage('sword', 'content/images/link.png')
 
 class Sword(Sprite):
 	def __init__(self):

@@ -1,7 +1,7 @@
 import pygame
 from pygame.locals import *
-from globalcomm import GlobalComm
-from contentmanager import ContentManager
+from helpers.globalcomm import GlobalComm
+from helpers.contentmanager import ContentManager
 
 class Sprite:
 	def __init__(self, ImageKey, TileSize, Padding):

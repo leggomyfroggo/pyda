@@ -1,7 +1,7 @@
 import pygame
 from pygame.locals import *
-from globalcomm import GlobalComm
-from enemy import Enemy
+from helpers.globalcomm import GlobalComm
+from gameobjects.enemy import Enemy
 
 MOVE_SPEED = 30
 WALK_ANIM_SPEED = 6
@@ -68,7 +68,6 @@ class Goriya(Enemy):
 			self.knockbackTimer += dt
 			if self.knockbackTimer >= KNOCKBACK_DURATION:
 				self.isKnockedBack = False
-				print self.oldSpeed
 				self.speed = self.oldSpeed
 				self.SetAnimation('walk_' + self.direction)
 		self.position = (self.position[0] + self.speed[0] * dt, self.position[1] + self.speed[1] * dt)

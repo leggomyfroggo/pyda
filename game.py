@@ -1,9 +1,9 @@
 import pygame
 from pygame.locals import *
-from link import Link
-from sword import Sword
-from goriya import Goriya
-from globalcomm import GlobalComm
+from gameobjects.link import Link
+from gameobjects.sword import Sword
+from gameobjects.goriya import Goriya
+from helpers.globalcomm import GlobalComm
 
 FRAMES_PER_SECOND = 60
 DRAW_SURFACE_SIZE = (256, 224)
