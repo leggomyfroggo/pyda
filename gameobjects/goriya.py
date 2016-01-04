@@ -19,6 +19,16 @@ KNOCKBACK_DURATION = 0.25
 KNOCKBACK_SPEED = 90
 KNOCKBACK_ANIM_SPEED = 30
 
+# Generate the Goriya's animations
+GORIYA_ANIMATIONS = [
+	# Walking
+	('walk_down', [(0, 2, 0, 0), (0, 3, 0, 0)], WALK_ANIM_SPEED, True),
+	('walk_left', [(1, 2, 0, 0), (1, 3, 0, 0)], WALK_ANIM_SPEED, True),
+	('walk_up', [(2, 2, 0, 0), (2, 3, 0, 0)], WALK_ANIM_SPEED, True),
+	('walk_right', [(3, 2, 0, 0), (3, 3, 0, 0)], WALK_ANIM_SPEED, True),
+	# Flashing
+	('knockback_spin', [(4, 2, 0, 0), (1, 2, 0, 0), (6, 2, 0, 0), (3, 2, 0, 0)], KNOCKBACK_ANIM_SPEED, True)]
+
 class Goriya(Enemy):
 	"""
 	Represents an Enemy of the Goriya type.
@@ -38,15 +48,11 @@ class Goriya(Enemy):
 		self.dirSwitchTimer = 0.0
 		self.speed = (0, 0)
 		self.oldSpeed = (0, 0)
-		# Setup the animations
-		# Walking
-		self.AddAnimation('walk_down', [(0, 2, 0, 0), (0, 3, 0, 0)], WALK_ANIM_SPEED, True)
-		self.AddAnimation('walk_left', [(1, 2, 0, 0), (1, 3, 0, 0)], WALK_ANIM_SPEED, True)
-		self.AddAnimation('walk_up', [(2, 2, 0, 0), (2, 3, 0, 0)], WALK_ANIM_SPEED, True)
-		self.AddAnimation('walk_right', [(3, 2, 0, 0), (3, 3, 0, 0)], WALK_ANIM_SPEED, True)
+		# Add the animations
+		for a in GORIYA_ANIMATIONS:
+			self.AddAnimation(a[0], a[1], a[2], a[3])
 		self.SetAnimation('walk_down')
-		# Flashing
-		self.AddAnimation('knockback_spin', [(4, 2, 0, 0), (1, 2, 0, 0), (6, 2, 0, 0), (3, 2, 0, 0)], KNOCKBACK_ANIM_SPEED, True)
+
 	def Update(self):
 		"""
 		Updates the Goriya's state.

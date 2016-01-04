@@ -13,6 +13,13 @@ UP = 'up'
 # Load the sword's content
 ContentManager.LoadImage('sword', 'content/images/link.png')
 
+# Generate the sword animations
+SWORD_ANIMATIONS = [
+		('down', [(0, 6.5, 1, (x + 1) * 2) for x in range(7)] + [(0, 6.5, 1, 14 - (x + 1) * 2) for x in range(7)], 84, False),
+		('left', [(1, 6.5, (x + 1) * -2, 2) for x in range(7)] + [(1, 6.5, -14 + (x + 1) * 2, 2) for x in range(7)], 84, False),
+		('up', [(2, 6.5, -1, (x + 1) * -2) for x in range(7)] + [(2, 6.5, -1, -14 + (x + 1) * 2) for x in range(7)], 84, False),
+		('right', [(3, 6.5, (x + 1) * 2, 2) for x in range(7)] + [(3, 6.5, 14 - (x + 1) * 2, 2) for x in range(7)], 84, False)]
+
 class Sword(Sprite):
 	"""
 	Represents Link's sword.
@@ -27,10 +34,8 @@ class Sword(Sprite):
 		self.direction = DOWN
 		self.zOrder = 0.99
 		# Add the sword animations
-		self.AddAnimation('down', [(0, 6.5, 1, (x + 1) * 2) for x in range(7)] + [(0, 6.5, 1, 14 - (x + 1) * 2) for x in range(7)], 84, False)
-		self.AddAnimation('left', [(1, 6.5, (x + 1) * -2, 2) for x in range(7)] + [(1, 6.5, -14 + (x + 1) * 2, 2) for x in range(7)], 84, False)
-		self.AddAnimation('up', [(2, 6.5, -1, (x + 1) * -2) for x in range(7)] + [(2, 6.5, -1, -14 + (x + 1) * 2) for x in range(7)], 84, False)
-		self.AddAnimation('right', [(3, 6.5, (x + 1) * 2, 2) for x in range(7)] + [(3, 6.5, 14 - (x + 1) * 2, 2) for x in range(7)], 84, False)
+		for a in SWORD_ANIMATIONS:
+			self.AddAnimation(a[0], a[1], a[2], a[3])
 		self.SetAnimation('down')
 
 	def ResetForSwing(self, Position, Direction):
